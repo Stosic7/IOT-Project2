@@ -1,0 +1,125 @@
+name: kafka-side
+
+services:
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: kafka
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      CLUSTER_ID: EKDsc-7VSuqVl6NwVXWc-w
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_MESSAGE_MAX_BYTES: 1048576
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  kafka-init:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: kafka-init
+    depends_on:
+      kafka:
+        condition: service_healthy
+    entrypoint: ["bash", "-c"]
+    command:
+      - |
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic iot-sensors --partitions 3 --replication-factor 1
+        kafka-topics --bootstrap-server kafka:9092 --describe --topic iot-sensors
+    restart: "no"
+
+  postgres-kafka:
+    image: postgres:16
+    container_name: postgres-kafka
+    environment:
+      POSTGRES_DB: iot_kafka
+      POSTGRES_USER: iot
+      POSTGRES_PASSWORD: iot
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_kafka_data:/var/lib/postgresql/data
+      - ./kafka/storage-service/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U iot -d iot_kafka"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  kafka-ingestion:
+    build: ./kafka/ingestion-service
+    container_name: kafka-ingestion
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+    volumes:
+      - ./real_time_data.csv:/data/real_time_data.csv:ro
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_TOPIC: iot-sensors
+      KAFKA_ACKS: "${KAFKA_ACKS:-1}"
+      DEVICE_COUNT: "${DEVICE_COUNT:-100}"
+      MAX_PRODUCER_THREADS: "${MAX_PRODUCER_THREADS:-64}"
+      RUN_DURATION_SEC: "${RUN_DURATION_SEC:-60}"
+      RATE_PER_DEVICE_MS: "${RATE_PER_DEVICE_MS:-0}"
+      RUN_MODE: "${RUN_MODE:-normal}"
+      INJECT_ALERTS: "${INJECT_ALERTS:-false}"
+      ALERT_PROBABILITY: "${ALERT_PROBABILITY:-0.05}"
+      BURST_BASE_RATE: "${BURST_BASE_RATE:-50}"
+      BURST_PEAK_RATE: "${BURST_PEAK_RATE:-5000}"
+      BURST_PEAK_SEC: "${BURST_PEAK_SEC:-5}"
+      BURST_BASE_SEC: "${BURST_BASE_SEC:-10}"
+      CSV_PATH: /data/real_time_data.csv
+
+  kafka-storage:
+    build: ./kafka/storage-service
+    container_name: kafka-storage
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+      postgres-kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_TOPIC: iot-sensors
+      CONSUMER_GROUP: storage-group
+      POSTGRES_CONNECTION_STRING: "Host=postgres-kafka;Port=5432;Database=iot_kafka;Username=iot;Password=iot"
+      BATCH_SIZE: "${BATCH_SIZE:-500}"
+      FLUSH_INTERVAL_MS: "${FLUSH_INTERVAL_MS:-2000}"
+      DISABLE_DB_WRITE: "${DISABLE_DB_WRITE:-false}"
+
+  kafka-analytics:
+    build: ./kafka/analytics-service
+    container_name: kafka-analytics
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_TOPIC: iot-sensors
+      CONSUMER_GROUP: analytics-group
+      TEMP_ALERT_THRESHOLD: "${TEMP_ALERT_THRESHOLD:-50}"
+      WINDOW_SEC: "${WINDOW_SEC:-10}"
+      LATENCY_SAMPLE_EVERY: "${LATENCY_SAMPLE_EVERY:-1}"
+
+volumes:
+  kafka_data:
+  postgres_kafka_data:
