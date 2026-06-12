@@ -1,0 +1,100 @@
+services:
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mqtt/mosquitto/config:/mosquitto/config
+      - ./mqtt/mosquitto/data:/mosquitto/data
+      - ./mqtt/mosquitto/log:/mosquitto/log
+    networks:
+      - mqtt-net
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    container_name: postgres-mqtt
+    environment:
+      POSTGRES_DB: iot_mqtt
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-mqtt-data:/var/lib/postgresql/data
+    networks:
+      - mqtt-net
+    restart: unless-stopped
+
+  mqtt-ingestion:
+    build:
+      context: ./mqtt
+      dockerfile: Dockerfile
+    container_name: mqtt-ingestion
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: ingestion
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/iot_mqtt
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      MQTT_BROKER_URL: tcp://mosquitto:1883
+      MQTT_QOS: ${MQTT_QOS:-1}
+      DEVICE_COUNT: ${DEVICE_COUNT:-100}
+    depends_on:
+      - mosquitto
+      - postgres
+    networks:
+      - mqtt-net
+    restart: unless-stopped
+
+  mqtt-storage:
+    build:
+      context: ./mqtt
+      dockerfile: Dockerfile
+    container_name: mqtt-storage
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: storage
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/iot_mqtt
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      MQTT_BROKER_URL: tcp://mosquitto:1883
+      MQTT_QOS: ${MQTT_QOS:-1}
+    depends_on:
+      - mosquitto
+      - postgres
+    networks:
+      - mqtt-net
+    restart: unless-stopped
+
+  mqtt-analytics:
+    build:
+      context: ./mqtt
+      dockerfile: Dockerfile
+    container_name: mqtt-analytics
+    ports:
+      - "8083:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: analytics
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/iot_mqtt
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      MQTT_BROKER_URL: tcp://mosquitto:1883
+      MQTT_QOS: ${MQTT_QOS:-1}
+    depends_on:
+      - mosquitto
+      - postgres
+    networks:
+      - mqtt-net
+    restart: unless-stopped
+
+networks:
+  mqtt-net:
+    driver: bridge
+
+volumes:
+  postgres-mqtt-data:
