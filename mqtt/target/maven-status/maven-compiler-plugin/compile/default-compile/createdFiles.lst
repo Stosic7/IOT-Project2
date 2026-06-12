@@ -1,0 +1,11 @@
+com/aleksa/iots/iots/ingestion/MqttOutboundConfig.class
+com/aleksa/iots/iots/analytics/AnalyticsService.class
+com/aleksa/iots/iots/model/SensorReading.class
+com/aleksa/iots/iots/analytics/AnalyticsMqttInboundConfig.class
+com/aleksa/iots/iots/storage/MqttInboundConfig.class
+com/aleksa/iots/iots/storage/StorageService.class
+com/aleksa/iots/iots/model/SensorReadingDto.class
+com/aleksa/iots/iots/IotsApplication.class
+com/aleksa/iots/iots/ingestion/IngestionService.class
+com/aleksa/iots/iots/repository/SensorReadingRepository.class
+com/aleksa/iots/iots/ingestion/MqttConfig.class
