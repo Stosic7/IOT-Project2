@@ -1,0 +1,2 @@
+01:34:28.811 info: Analytics[0] [WINDOW] count=740 avgTemp=57.58C
+01:34:28.811 crit: Analytics[0] [ALERT] Prosecna temperatura u prozoru: 57.58C (n=740) - KRITICNO! prag=50C

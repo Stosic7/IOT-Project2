@@ -1,0 +1,12 @@
+ Container kafka Running 
+ Container kafka Waiting 
+ Container kafka Healthy 
+ Container kafka-init Starting 
+ Container kafka-init Started 
+ Container kafka-init Waiting 
+ Container kafka-init Exited 
+ Container kafka-side-kafka-ingestion-run-08313f35e341 Creating 
+ Container kafka-side-kafka-ingestion-run-08313f35e341 Created 
+01:34:01.986 info: Ingestion[0] Ingestion starting | bootstrap=kafka:9092 topic=iot-sensors acks=1 deviceCount=10 runMode=normal durationSec=15 ratePerDeviceMs=200
+01:34:02.514 info: Ingestion[0] Loaded 500000 rows from /data/real_time_data.csv
+01:34:17.573 info: Ingestion[0] [SUMMARY] sent=740 failed=0 lossPct=0.000% elapsedSec=15.0 throughput=49.3 msg/s

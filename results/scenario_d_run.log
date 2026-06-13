@@ -1,0 +1,20 @@
+>>> Starting broker + storage + analytics
+ Container kafka Running 
+ Container postgres-kafka Running 
+ Container kafka-analytics Running 
+ Container kafka-storage Running 
+ Container kafka Waiting 
+ Container kafka Healthy 
+ Container kafka-init Starting 
+ Container kafka-init Started 
+ Container kafka-init Waiting 
+ Container postgres-kafka Waiting 
+ Container kafka-init Waiting 
+ Container postgres-kafka Healthy 
+ Container kafka-init Exited 
+ Container kafka-init Exited 
+>>> Ingestion sa INJECT_ALERTS=true, 20 uredjaja, 60s
+>>> Cekanje 12s da se poslednji tumbling window (10s) obradi
+>>> Izvlacenje [LATENCY] / [ALERT] redova iz kafka-analytics logova
+samples=29384 p50=7.5ms p95=10.0ms p99=11.2ms
+Done. Vidi results/scenario_d_analytics.log i results/scenario_d_summary.txt

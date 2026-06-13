@@ -1,0 +1,50 @@
+>>> Starting broker + storage + analytics
+ Network kafka-side_default Creating 
+ Network kafka-side_default Created 
+ Container postgres-kafka Creating 
+ Container kafka Creating 
+ Container kafka Created 
+ Container kafka-init Creating 
+ Container postgres-kafka Created 
+ Container kafka-init Created 
+ Container kafka-storage Creating 
+ Container kafka-analytics Creating 
+ Container kafka-storage Created 
+ Container kafka-analytics Created 
+ Container kafka Starting 
+ Container postgres-kafka Starting 
+ Container kafka Started 
+ Container kafka Waiting 
+ Container postgres-kafka Started 
+ Container kafka Healthy 
+ Container kafka-init Starting 
+ Container kafka-init Started 
+ Container kafka-init Waiting 
+ Container kafka-init Waiting 
+ Container postgres-kafka Waiting 
+ Container postgres-kafka Healthy 
+ Container kafka-init Exited 
+ Container kafka-storage Starting 
+ Container kafka-init Exited 
+ Container kafka-analytics Starting 
+ Container kafka-storage Started 
+ Container kafka-analytics Started 
+>>> Scenario A: DEVICE_COUNT=100 ACKS=0
+Snapshot appended to results/scenario_a_docker_stats.csv
+>>> Scenario A: DEVICE_COUNT=100 ACKS=1
+Snapshot appended to results/scenario_a_docker_stats.csv
+>>> Scenario A: DEVICE_COUNT=100 ACKS=all
+Snapshot appended to results/scenario_a_docker_stats.csv
+>>> Scenario A: DEVICE_COUNT=1000 ACKS=0
+Snapshot appended to results/scenario_a_docker_stats.csv
+>>> Scenario A: DEVICE_COUNT=1000 ACKS=1
+Snapshot appended to results/scenario_a_docker_stats.csv
+>>> Scenario A: DEVICE_COUNT=1000 ACKS=all
+Snapshot appended to results/scenario_a_docker_stats.csv
+>>> Scenario A: DEVICE_COUNT=10000 ACKS=0
+Snapshot appended to results/scenario_a_docker_stats.csv
+>>> Scenario A: DEVICE_COUNT=10000 ACKS=1
+Snapshot appended to results/scenario_a_docker_stats.csv
+>>> Scenario A: DEVICE_COUNT=10000 ACKS=all
+Snapshot appended to results/scenario_a_docker_stats.csv
+Done. Rezultati u results/scenario_a_kafka.csv

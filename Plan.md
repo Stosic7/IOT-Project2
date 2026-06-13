@@ -358,14 +358,45 @@ projekat2/
 
 ### Kafka
 
-| acks | Uređaji | Throughput (msg/s) | p95 latencija | Consumer Lag | CPU | RAM |
-|------|---------|-------------------|---------------|--------------|-----|-----|
-| 0    | 100     | —                 | —             | —            | —   | —   |
-| 0    | 1000    | —                 | —             | —            | —   | —   |
-| 1    | 100     | —                 | —             | —            | —   | —   |
-| 1    | 1000    | —                 | —             | —            | —   | —   |
-| all  | 100     | —                 | —             | —            | —   | —   |
-| all  | 1000    | —                 | —             | —            | —   | —   |
+**Scenario A (Massive Sensor Ingestion, 30s po kombinaciji, maxProducerThreads=64, tight-loop max throughput):**
+
+| acks | Uređaji | Throughput (msg/s) | Izgubljene poruke (queue-full)* | Kafka broker CPU | Kafka broker RAM |
+|------|---------|-------------------|----------------------------------|-------------------|-------------------|
+| 0    | 100     | 264466            | 30.2%                            | 104.3%            | 0.96 GB           |
+| 1    | 100     | 243737            | 34.8%                            | 14.7%             | 1.04 GB           |
+| all  | 100     | 191583            | 37.1%                            | 13.2%             | 1.07 GB           |
+| 0    | 1000    | 222467            | 34.5%                            | 14.8%             | 1.07 GB           |
+| 1    | 1000    | 228399            | 36.3%                            | 15.7%             | 1.08 GB           |
+| all  | 1000    | 205926            | 33.8%                            | 17.4%             | 1.09 GB           |
+| 0    | 10000   | 209657            | 36.0%                            | 41.0%             | 1.12 GB           |
+| 1    | 10000   | 268225            | 29.6%                            | 19.9%             | 1.16 GB           |
+| all  | 10000   | 245676            | 34.0%                            | 15.3%             | 1.18 GB           |
+
+\* "Izgubljene poruke" = `KafkaException` (queue-full) na producer-u — `QueueBufferingMaxMessages=1_000_000` se popuni jer producer (64 tight-loop worker-a) generiše poruke brže nego što ih broker+mreža mogu primiti, bez obzira na `acks`. Throughput/loss ne zavise monotono od `acks` jer su oba dominirana CPU-om klijenta, ne mrežnim RTT-om.
+
+**Scenario D (Real-Time Alerting, 20 uređaja, 200ms/uređaj, acks=1, INJECT_ALERTS):**
+
+| Metrika | Vrednost |
+|---------|----------|
+| Samples | 29384 |
+| p50 end-to-end latencija | 7.5 ms |
+| p95 end-to-end latencija | 10.0 ms |
+| p99 end-to-end latencija | 11.2 ms |
+| Alert demo (ALERT_PROBABILITY=1.0) | `[WINDOW] count=740 avgTemp=57.58C` → `[ALERT] ... 57.58C - KRITICNO! prag=50C` |
+
+**Scenario B (Edge Connectivity Failure — 30s `docker network disconnect` na kafka-ingestion):**
+Consumer lag (storage-group) je nastavio da se smanjuje tokom i nakon prekida (npr. partition 1: lag 9315403 → 9297174 u ~70s), bez greške ili gubitka — Kafka consumer nezavisno čita commit log po committed offset-u, prekid producer-a ne utiče na consumer recovery. Detalji: `results/scenario_b.log`.
+
+**Scenario C (Burst Event Load — 50 → 5000 → 50 msg/s):**
+
+| t (s) | Consumer Lag (po particiji) |
+|-------|------------------------------|
+| 0     | ~0 |
+| 12    | 81 / 93 / 90 (peak tokom burst-a) |
+| 20    | 5 / 3 / 2 |
+| 28+   | 0 / 0 / 0 |
+
+Backlog formiran tokom 5s burst-a (5000 msg/s) je u potpunosti otklonjen (lag=0) u roku od ~8s nakon povratka na baznu stopu — recovery time ≈ 8s. Detalji: `results/scenario_c_lag.log`.
 
 ---
 

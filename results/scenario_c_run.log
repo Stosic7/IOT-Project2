@@ -1,0 +1,38 @@
+>>> Starting broker + storage + analytics
+ Network kafka-side_default Creating 
+ Network kafka-side_default Created 
+ Volume kafka-side_postgres_kafka_data Creating 
+ Volume kafka-side_postgres_kafka_data Created 
+ Volume kafka-side_kafka_data Creating 
+ Volume kafka-side_kafka_data Created 
+ Container postgres-kafka Creating 
+ Container kafka Creating 
+ Container kafka Created 
+ Container kafka-init Creating 
+ Container postgres-kafka Created 
+ Container kafka-init Created 
+ Container kafka-analytics Creating 
+ Container kafka-storage Creating 
+ Container kafka-analytics Created 
+ Container kafka-storage Created 
+ Container kafka Starting 
+ Container postgres-kafka Starting 
+ Container kafka Started 
+ Container kafka Waiting 
+ Container postgres-kafka Started 
+ Container kafka Healthy 
+ Container kafka-init Starting 
+ Container kafka-init Started 
+ Container postgres-kafka Waiting 
+ Container kafka-init Waiting 
+ Container kafka-init Waiting 
+ Container postgres-kafka Healthy 
+ Container kafka-init Exited 
+ Container kafka-analytics Starting 
+ Container kafka-init Exited 
+ Container kafka-storage Starting 
+ Container kafka-storage Started 
+ Container kafka-analytics Started 
+>>> Burst ingestion: 50 -> 5000 -> 50 msg/s (25s ukupno)
+>>> Sampling consumer lag (storage-group) svake 2s tokom burst-a
+Done. Vidi results/scenario_c_ingestion.log i results/scenario_c_lag.log

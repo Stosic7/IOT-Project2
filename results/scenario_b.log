@@ -1,0 +1,99 @@
+>>> [t=0s] Consumer lag pre prekida:
+
+GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                  HOST            CLIENT-ID
+storage-group   iot-sensors     0          10390986        19610210        9219224         rdkafka-3aa272a7-7977-444e-a90a-2988cda44b1b /172.19.0.4     rdkafka
+storage-group   iot-sensors     1          10216364        21107133        10890769        rdkafka-3aa272a7-7977-444e-a90a-2988cda44b1b /172.19.0.4     rdkafka
+storage-group   iot-sensors     2          10176131        21704816        11528685        rdkafka-3aa272a7-7977-444e-a90a-2988cda44b1b /172.19.0.4     rdkafka
+>>> Disconnecting kafka-ingestion od mreze 'kafka-side_default' na 30s
+>>> Reconnecting kafka-ingestion
+--- kafka-ingestion logs (tail) ---
+01:28:07.700 info: Ingestion[0] Ingestion starting | bootstrap=kafka:9092 topic=iot-sensors acks=1 deviceCount=20 runMode=normal durationSec=120 ratePerDeviceMs=200
+01:28:08.464 info: Ingestion[0] Loaded 500000 rows from /data/real_time_data.csv
+--- kafka-storage logs (tail) ---
+01:29:15.179 info: Storage[0] [LAG] partition=0 highWatermark=19610222 committed=11940035 lag=7670187
+01:29:15.179 info: Storage[0] [LAG] partition=1 highWatermark=21107151 committed=11791748 lag=9315403
+01:29:15.179 info: Storage[0] [LAG] partition=2 highWatermark=21704826 committed=11686198 lag=10018628
+01:29:15.184 info: Storage[0] [BATCH] flushed 500 readings (dbWrite=True)
+01:29:15.184 info: Storage[0] [LAG] partition=0 highWatermark=19610222 committed=11940535 lag=7669687
+01:29:15.184 info: Storage[0] [LAG] partition=1 highWatermark=21107151 committed=11791748 lag=9315403
+01:29:15.184 info: Storage[0] [LAG] partition=2 highWatermark=21704826 committed=11686198 lag=10018628
+01:29:15.189 info: Storage[0] [BATCH] flushed 500 readings (dbWrite=True)
+01:29:15.189 info: Storage[0] [LAG] partition=0 highWatermark=19610222 committed=11941035 lag=7669187
+01:29:15.190 info: Storage[0] [LAG] partition=1 highWatermark=21107151 committed=11791748 lag=9315403
+01:29:15.190 info: Storage[0] [LAG] partition=2 highWatermark=21704826 committed=11686198 lag=10018628
+01:29:15.193 info: Storage[0] [BATCH] flushed 500 readings (dbWrite=True)
+01:29:15.193 info: Storage[0] [LAG] partition=0 highWatermark=19610222 committed=11941535 lag=7668687
+01:29:15.194 info: Storage[0] [LAG] partition=1 highWatermark=21107151 committed=11791748 lag=9315403
+01:29:15.194 info: Storage[0] [LAG] partition=2 highWatermark=21704826 committed=11686198 lag=10018628
+01:29:15.198 info: Storage[0] [BATCH] flushed 500 readings (dbWrite=True)
+01:29:15.199 info: Storage[0] [LAG] partition=0 highWatermark=19610222 committed=11942035 lag=7668187
+01:29:15.199 info: Storage[0] [LAG] partition=1 highWatermark=21107151 committed=11791748 lag=9315403
+01:29:15.199 info: Storage[0] [LAG] partition=2 highWatermark=21704826 committed=11686198 lag=10018628
+01:29:15.204 info: Storage[0] [BATCH] flushed 500 readings (dbWrite=True)
+01:29:15.204 info: Storage[0] [LAG] partition=0 highWatermark=19610222 committed=11942116 lag=7668106
+01:29:15.204 info: Storage[0] [LAG] partition=1 highWatermark=21107151 committed=11792167 lag=9314984
+01:29:15.204 info: Storage[0] [LAG] partition=2 highWatermark=21704826 committed=11686198 lag=10018628
+01:29:15.210 info: Storage[0] [BATCH] flushed 500 readings (dbWrite=True)
+01:29:15.210 info: Storage[0] [LAG] partition=0 highWatermark=19610222 committed=11942116 lag=7668106
+01:29:15.210 info: Storage[0] [LAG] partition=1 highWatermark=21107151 committed=11792667 lag=9314484
+01:29:15.211 info: Storage[0] [LAG] partition=2 highWatermark=21704826 committed=11686198 lag=10018628
+01:29:15.216 info: Storage[0] [BATCH] flushed 500 readings (dbWrite=True)
+01:29:15.216 info: Storage[0] [LAG] partition=0 highWatermark=19610222 committed=11942116 lag=7668106
+01:29:15.216 info: Storage[0] [LAG] partition=1 highWatermark=21107151 committed=11793167 lag=9313984
+01:29:15.217 info: Storage[0] [LAG] partition=2 highWatermark=21704826 committed=11686198 lag=10018628
+01:29:15.220 info: Storage[0] [BATCH] flushed 500 readings (dbWrite=True)
+01:29:15.221 info: Storage[0] [LAG] partition=0 highWatermark=19610222 committed=11942116 lag=7668106
+01:29:15.221 info: Storage[0] [LAG] partition=1 highWatermark=21107151 committed=11793667 lag=9313484
+01:29:15.222 info: Storage[0] [LAG] partition=2 highWatermark=21704826 committed=11686198 lag=10018628
+01:29:15.227 info: Storage[0] [BATCH] flushed 500 readings (dbWrite=True)
+01:29:15.227 info: Storage[0] [LAG] partition=0 highWatermark=19610222 committed=11942116 lag=7668106
+01:29:15.227 info: Storage[0] [LAG] partition=1 highWatermark=21107151 committed=11794167 lag=9312984
+01:29:15.227 info: Storage[0] [LAG] partition=2 highWatermark=21704826 committed=11686198 lag=10018628
+01:29:15.231 info: Storage[0] [BATCH] flushed 500 readings (dbWrite=True)
+--- kafka-analytics logs (tail) ---
+01:28:24.643 info: Analytics[0] [LATENCY] Device_2: 6.4ms end-to-end
+01:28:24.643 info: Analytics[0] [LATENCY] Device_1: 6.4ms end-to-end
+01:28:24.643 info: Analytics[0] [LATENCY] Device_10: 6.4ms end-to-end
+01:28:24.643 info: Analytics[0] [LATENCY] Device_0: 6.4ms end-to-end
+01:28:24.643 info: Analytics[0] [LATENCY] Device_11: 6.4ms end-to-end
+01:28:24.643 info: Analytics[0] [LATENCY] Device_3: 3.5ms end-to-end
+01:28:24.643 info: Analytics[0] [LATENCY] Device_7: 3.5ms end-to-end
+01:28:24.643 info: Analytics[0] [LATENCY] Device_16: 3.5ms end-to-end
+01:28:24.644 info: Analytics[0] [LATENCY] Device_9: 6.7ms end-to-end
+01:28:24.644 info: Analytics[0] [LATENCY] Device_4: 6.7ms end-to-end
+01:28:24.644 info: Analytics[0] [LATENCY] Device_15: 6.7ms end-to-end
+01:28:24.644 info: Analytics[0] [LATENCY] Device_17: 3.7ms end-to-end
+01:28:24.644 info: Analytics[0] [LATENCY] Device_12: 3.7ms end-to-end
+01:28:24.644 info: Analytics[0] [LATENCY] Device_5: 6.9ms end-to-end
+01:28:24.644 info: Analytics[0] [LATENCY] Device_19: 6.9ms end-to-end
+01:28:24.644 info: Analytics[0] [LATENCY] Device_14: 6.9ms end-to-end
+01:28:24.644 info: Analytics[0] [LATENCY] Device_18: 6.9ms end-to-end
+01:28:24.644 info: Analytics[0] [LATENCY] Device_13: 3.9ms end-to-end
+01:28:24.644 info: Analytics[0] [LATENCY] Device_6: 3.9ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_18: 6.7ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_5: 6.7ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_14: 6.7ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_19: 6.7ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_13: 3.9ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_6: 4.0ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_0: 7.0ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_2: 7.0ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_1: 7.0ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_10: 7.0ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_8: 7.0ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_11: 7.1ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_3: 4.2ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_16: 4.2ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_7: 4.2ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_4: 7.2ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_9: 7.3ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_15: 7.2ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_17: 4.4ms end-to-end
+01:28:24.845 info: Analytics[0] [LATENCY] Device_12: 4.4ms end-to-end
+01:28:25.026 info: Analytics[0] [WINDOW] count=980 avgTemp=18.34C
+--- consumer lag (storage-group) posle recovery ---
+
+GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                  HOST            CLIENT-ID
+storage-group   iot-sensors     0          11958747        19610222        7651475         rdkafka-3aa272a7-7977-444e-a90a-2988cda44b1b /172.19.0.4     rdkafka
+storage-group   iot-sensors     1          11809977        21107151        9297174         rdkafka-3aa272a7-7977-444e-a90a-2988cda44b1b /172.19.0.4     rdkafka
+storage-group   iot-sensors     2          11701257        21704826        10003569        rdkafka-3aa272a7-7977-444e-a90a-2988cda44b1b /172.19.0.4     rdkafka
