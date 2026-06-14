@@ -348,8 +348,8 @@ rows = [
     ['MQTT QoS 0', '623k msg/s', '13 ms', '99%', '~870 MB'],
     ['MQTT QoS 1', '80k msg/s',  '28 ms', '106%', '~880 MB'],
     ['MQTT QoS 2', '43k msg/s',  '31 ms', '106%', '~870 MB'],
-    ['Kafka (acks=0)', 'kolega',  'kolega', 'kolega', '~512 MB+'],
-    ['Kafka (acks=all)', 'kolega', 'kolega', 'kolega', '~512 MB+'],
+    ['Kafka (acks=0)', '264k msg/s', '~10 ms*', '104%', '~1.1 GB'],
+    ['Kafka (acks=all)', '246k msg/s', '~10 ms*', '17%', '~1.2 GB'],
 ]
 
 col_w = [1.8, 1.7, 1.5, 1.5, 1.6]
@@ -384,6 +384,12 @@ for i, row in enumerate(rows):
         run.font.size = Pt(9)
         run.font.bold = (j == 0)
         run.font.color.rgb = BLACK
+
+add_text(sl,
+         '* p95 latencija merena u Scenariju D (acks=1, RF=1) — acks nivo ne menja trenutak upisa '
+         'poruke u broker log, vec samo producer-side confirmation (utice na throughput/loss, vidi Scenario A).',
+         Inches(0.3), Inches(top_start + row_h * 6 + 0.1), Inches(9.2), Inches(0.6),
+         size=8, color=RGBColor(0x66,0x66,0x66))
 
 # ═══════════════════════════════════════════════════════════════
 # SLIDE 8 — MQTT: prednosti i ogranicenja

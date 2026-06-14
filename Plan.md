@@ -346,15 +346,19 @@ projekat2/
 
 ### MQTT
 
-| QoS | Uređaji | Throughput (msg/s) | p95 latencija | Izgubljene poruke | CPU | RAM |
-|-----|---------|-------------------|---------------|-------------------|-----|-----|
-| 0   | 100     | —                 | —             | —                 | —   | —   |
-| 0   | 1000    | —                 | —             | —                 | —   | —   |
-| 0   | 10000   | —                 | —             | —                 | —   | —   |
-| 1   | 100     | —                 | —             | —                 | —   | —   |
-| 1   | 1000    | —                 | —             | —                 | —   | —   |
-| 2   | 100     | —                 | —             | —                 | —   | —   |
-| 2   | 1000    | —                 | —             | —                 | —   | —   |
+**Scenario A (Massive Sensor Ingestion, konfigurisana stopa = 1 msg/s po uređaju):**
+
+| QoS | Uređaji | Throughput (msg/s) | p95 latencija | Izgubljene poruke | CPU (Mosquitto) | RAM (Mosquitto) |
+|-----|---------|-------------------|---------------|-------------------|-----------------|------------------|
+| 0   | 100     | 100               | 13.2 ms       | ~0%*              | 2.62%           | 891 MB           |
+| 0   | 1000    | 1000              | 13.2 ms       | ~0%*              | 2.70%           | 844 MB           |
+| 0   | 10000   | 10000             | 13.2 ms       | ~0%*              | 12.61%          | 864 MB           |
+| 1   | 100     | 100               | 28.4 ms       | ~0%*              | 5.24%           | 874 MB           |
+| 1   | 1000    | 1000              | 28.4 ms       | ~0%*              | 4.79%           | 872 MB           |
+| 2   | 100     | 100               | 31.4 ms       | 0%                | 2.70%           | 875 MB           |
+| 2   | 1000    | 1000              | 31.4 ms       | 0%                | 6.26%           | 892 MB           |
+
+\* Scenario A je izvršen na konfigurisanoj stopi (1 msg/s po uređaju), ispod kapaciteta brokera — gubitak poruka je zanemarljiv na svim QoS nivoima u ovom režimu. Za ponašanje pod maksimalnim opterećenjem vidi benchmark (Faza 5, `mqtt/results/mqtt_benchmark.csv`, emqtt-bench): na max throughput-u QoS1/2 dostižu overrun ~99% — broker ne stiže da isporuči poruke brzinom kojom klijenti šalju, dok QoS0 na 500-1000 klijenata dostiže overrun ~48% pri throughput-u od 576k-624k msg/s.
 
 ### Kafka
 
