@@ -1,0 +1,8 @@
+event,timestamp,detail
+baseline,2026-06-14T15:50:08,sentCount=137600 totalRecords=29499
+disconnected,2026-06-14T15:50:08,container=mqtt-ingestion network=iot-project2_mqtt-net
+during_disconnect,2026-06-14T15:50:41,sentCount= (expected: no increase or errors)
+reconnected,2026-06-14T15:50:41,container=mqtt-ingestion network=iot-project2_mqtt-net
+recovery_10s,2026-06-14T15:50:51,sentCount=141900
+recovery_20s,2026-06-14T15:51:01,sentCount=143000 totalRecords=30599
+summary,2026-06-14T15:51:01,msgs_after_reconnect=143000 new_db_records=1100
