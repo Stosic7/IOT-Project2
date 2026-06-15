@@ -50,7 +50,7 @@ measure() {
   echo "${QOS},${LABEL},${DEVICES},${THROUGHPUT},${CPU},${MEM_MB}" >> "$RESULTS_FILE"
 }
 
-for QOS in 0 1; do
+for QOS in 0 1 2; do
   echo ""
   echo "========================================"
   echo "  Scenario C — Burst Load  (QoS=${QOS})"

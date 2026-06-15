@@ -3,7 +3,7 @@ set -e
 
 COMPOSE_FILE="$(dirname "$0")/../../docker-compose-mqtt.yml"
 RESULTS_FILE="$(dirname "$0")/../results/mqtt_scenario_a.csv"
-MEASURE_SECONDS=60
+MEASURE_SECONDS=30
 
 # Header
 echo "qos,device_count,throughput_msg_s,cpu_percent,mem_mb,total_sent" > "$RESULTS_FILE"
