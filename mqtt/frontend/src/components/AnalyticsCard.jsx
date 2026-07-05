@@ -21,6 +21,10 @@ export default function AnalyticsCard() {
             value={`${data.avgTemperature.toFixed(2)} °C`}
             highlight={data.alert}
           />
+          <Stat
+            label="MaaS Predicted Temp"
+            value={data.predictedTemperature != null ? `${data.predictedTemperature.toFixed(2)} °C` : '—'}
+          />
           <div className="latency-row">
             <LatencyStat label="p50" value={data.p50} />
             <LatencyStat label="p95" value={data.p95} />

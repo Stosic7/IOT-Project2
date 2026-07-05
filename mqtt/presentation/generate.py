@@ -73,15 +73,17 @@ def style_ax(ax, title=''):
 # Scenario A
 sa_qos   = [0,0,0,1,1,1,2,2,2]
 sa_dev   = [100,1000,10000]*3
-sa_tput  = [100,1000,10000, 100,1000,10000, 100,1000,11000]
-sa_cpu   = [2.62,2.70,12.61, 5.24,4.79,29.77, 2.70,6.26,102.83]
+sa_tput  = [10030,100800,6000, 10040,117800,None, 10060,117400,None]
+sa_cpu   = [22.04,156.93,440.22, 33.69,138.17,183.35, 48.91,135.69,320.24]
 
 # Scenario C
 sc_phases  = ['Normal\n(50 dev)','Burst\n(5000 dev)','Recovery\n(50 dev)']
-sc_tput_q0 = [55, 5000, 50]
-sc_tput_q1 = [55, 5000, 50]
-sc_cpu_q0  = [1.65, 9.43, 1.93]
-sc_cpu_q1  = [1.98, 18.09, 2.02]
+sc_tput_q0 = [5025, 513194, 5025]
+sc_tput_q1 = [5030, 502000, 5025]
+sc_tput_q2 = [5035, 486638, 5040]
+sc_cpu_q0  = [15.04, 501.92, 13.68]
+sc_cpu_q1  = [21.57, 145.84, 18.64]
+sc_cpu_q2  = [33.03, 245.60, 32.49]
 
 # Scenario D
 sd_qos_labels = ['QoS 0','QoS 1','QoS 2']
@@ -163,30 +165,33 @@ add_title(sl, 'Scenario A — Masovni unos podataka (Throughput)')
 fig, axes = plt.subplots(1, 2, figsize=(10, 3.6))
 fig.patch.set_facecolor('white')
 
-# Chart 1: throughput by device count per QoS
-x = np.arange(3)
+# Chart 1: throughput by device count per QoS (samo validne vrednosti)
+x = np.arange(2)  # 100 i 1000 uredjaja — 10k je anomalija osim QoS0
 w = 0.25
-labels = ['100', '1 000', '10 000']
+labels = ['100', '1 000']
 for i, (qos, color) in enumerate(zip([0,1,2], CHART_COLORS)):
-    vals = [sa_tput[i*3], sa_tput[i*3+1], sa_tput[i*3+2]]
+    vals = [sa_tput[i*3], sa_tput[i*3+1]]
     axes[0].bar(x + i*w, vals, w, label=f'QoS {qos}', color=color)
-axes[0].set_xticks(x + w)
-axes[0].set_xticklabels(labels)
+# QoS 0 na 10k posebno (pad throughputa)
+axes[0].bar(2 + 0*w, sa_tput[2], w, color=CHART_COLORS[0], hatch='//')
+axes[0].set_xticks([0+w, 1+w, 2+w])
+axes[0].set_xticklabels(['100', '1 000', '10 000\n(QoS 0)'])
 axes[0].set_xlabel('Broj uredjaja')
 axes[0].set_ylabel('msg/s')
-style_ax(axes[0], 'Throughput po broju uredjaja')
+style_ax(axes[0], 'Throughput — ingestion servis')
 axes[0].legend(fontsize=8)
+axes[0].yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f'{int(v/1000)}k' if v >= 1000 else str(int(v))))
 
-# Chart 2: CPU usage QoS 2 vs QoS 0 at 10000 devices
+# Chart 2: CPU na 1000 uredjaja (najreprezentativniji)
 qos_labels = ['QoS 0', 'QoS 1', 'QoS 2']
-cpu_10k = [12.61, 29.77, 102.83]
-bars = axes[1].bar(qos_labels, cpu_10k, color=CHART_COLORS, width=0.5)
+cpu_1k = [156.93, 138.17, 135.69]
+bars = axes[1].bar(qos_labels, cpu_1k, color=CHART_COLORS, width=0.5)
 axes[1].set_ylabel('CPU %')
 axes[1].axhline(100, color='#CC0000', linestyle='--', linewidth=1, label='100% (1 core)')
 axes[1].legend(fontsize=8)
-style_ax(axes[1], 'CPU na 10 000 uredjaja')
-for bar, val in zip(bars, cpu_10k):
-    axes[1].text(bar.get_x() + bar.get_width()/2, bar.get_height() + 1,
+style_ax(axes[1], 'CPU na 1 000 uredjaja')
+for bar, val in zip(bars, cpu_1k):
+    axes[1].text(bar.get_x() + bar.get_width()/2, bar.get_height() + 2,
                  f'{val}%', ha='center', va='bottom', fontsize=9)
 
 plt.tight_layout(pad=1.0)
@@ -204,20 +209,23 @@ fig, axes = plt.subplots(1, 2, figsize=(10, 3.6))
 fig.patch.set_facecolor('white')
 
 x = np.arange(3)
-w = 0.35
-axes[0].bar(x - w/2, sc_tput_q0, w, label='QoS 0', color=CHART_COLORS[0])
-axes[0].bar(x + w/2, sc_tput_q1, w, label='QoS 1', color=CHART_COLORS[1])
+w = 0.25
+axes[0].bar(x - w, sc_tput_q0, w, label='QoS 0', color=CHART_COLORS[0])
+axes[0].bar(x,     sc_tput_q1, w, label='QoS 1', color=CHART_COLORS[1])
+axes[0].bar(x + w, sc_tput_q2, w, label='QoS 2', color=CHART_COLORS[2])
 axes[0].set_xticks(x)
 axes[0].set_xticklabels(sc_phases)
 axes[0].set_ylabel('msg/s')
-style_ax(axes[0], 'Throughput po fazi')
+style_ax(axes[0], 'Throughput po fazi (normal/recovery validno)')
 axes[0].legend(fontsize=8)
 
-axes[1].bar(x - w/2, sc_cpu_q0, w, label='QoS 0', color=CHART_COLORS[0])
-axes[1].bar(x + w/2, sc_cpu_q1, w, label='QoS 1', color=CHART_COLORS[1])
+axes[1].bar(x - w, sc_cpu_q0, w, label='QoS 0', color=CHART_COLORS[0])
+axes[1].bar(x,     sc_cpu_q1, w, label='QoS 1', color=CHART_COLORS[1])
+axes[1].bar(x + w, sc_cpu_q2, w, label='QoS 2', color=CHART_COLORS[2])
 axes[1].set_xticks(x)
 axes[1].set_xticklabels(sc_phases)
 axes[1].set_ylabel('CPU %')
+axes[1].axhline(100, color='#CC0000', linestyle='--', linewidth=1, label='100% (1 core)')
 style_ax(axes[1], 'CPU po fazi')
 axes[1].legend(fontsize=8)
 
@@ -243,7 +251,7 @@ records_b  = [29499,  None, None,   30599]
 x_b = [0, 1, 2, 3]
 sent_vals  = [137600, 137600, 141900, 143000]
 axes[0].plot(x_b, sent_vals, 'o-', color=CHART_COLORS[0], linewidth=2, markersize=6)
-axes[0].axvspan(0.5, 1.5, color='#FFCCCC', alpha=0.5, label='Disconnect interval')
+axes[0].axvspan(0, 1, color='#FFCCCC', alpha=0.5, label='Disconnect interval')
 axes[0].set_xticks(x_b)
 axes[0].set_xticklabels(phases_b, fontsize=8)
 axes[0].set_ylabel('Ukupno poruka poslato')

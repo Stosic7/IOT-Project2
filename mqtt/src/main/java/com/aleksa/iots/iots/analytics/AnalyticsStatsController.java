@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
@@ -20,13 +21,17 @@ public class AnalyticsStatsController {
 
     @GetMapping
     public Map<String, Object> stats() {
-        return Map.of(
-            "lastWindowMessages", analyticsService.getLastWindowMessages(),
-            "avgTemperature", analyticsService.getLastAvgTemperature(),
-            "alert", analyticsService.isLastAlert(),
-            "p50", analyticsService.getP50(),
-            "p95", analyticsService.getP95(),
-            "p99", analyticsService.getP99()
-        );
+        Map<String, Object> stats = new LinkedHashMap<>();
+        stats.put("lastWindowMessages", analyticsService.getLastWindowMessages());
+        stats.put("avgTemperature", analyticsService.getLastAvgTemperature());
+        stats.put("alert", analyticsService.isLastAlert());
+        stats.put("p50", analyticsService.getP50());
+        stats.put("p95", analyticsService.getP95());
+        stats.put("p99", analyticsService.getP99());
+        stats.put("eventCount", analyticsService.getEventCount());
+        stats.put("eventsByType", analyticsService.getEventsByType());
+        stats.put("lastEvents", analyticsService.getLastEvents());
+        stats.put("predictedTemperature", analyticsService.getPredictedTemperature());
+        return stats;
     }
 }

@@ -1,7 +1,11 @@
 /Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/IotsApplication.java
+/Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/analytics/AnalyticsEventsInboundConfig.java
 /Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/analytics/AnalyticsMqttInboundConfig.java
 /Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/analytics/AnalyticsService.java
+/Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/analytics/AnalyticsStatsController.java
+/Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/config/CorsConfig.java
 /Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/ingestion/IngestionService.java
+/Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/ingestion/IngestionStatsController.java
 /Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/ingestion/MqttConfig.java
 /Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/ingestion/MqttOutboundConfig.java
 /Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/model/SensorReading.java
@@ -9,3 +13,4 @@
 /Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/repository/SensorReadingRepository.java
 /Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/storage/MqttInboundConfig.java
 /Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/storage/StorageService.java
+/Users/aleksastankovic/Documents/DEV FAKS/IOT-Project2/mqtt/src/main/java/com/aleksa/iots/iots/storage/StorageStatsController.java

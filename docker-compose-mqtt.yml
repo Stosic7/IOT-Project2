@@ -85,9 +85,35 @@ services:
       SPRING_DATASOURCE_PASSWORD: postgres
       MQTT_BROKER_URL: tcp://mosquitto:1883
       MQTT_QOS: ${MQTT_QOS:-1}
+      MAAS_URL: http://maas:8000
     depends_on:
       - mosquitto
       - postgres
+      - maas
+    networks:
+      - mqtt-net
+    restart: unless-stopped
+
+  ekuiper:
+    image: lfedge/ekuiper:2.0-slim
+    container_name: ekuiper
+    ports:
+      - "9081:9081"
+    environment:
+      MQTT_SOURCE__DEFAULT__SERVER: "tcp://mosquitto:1883"
+    depends_on:
+      - mosquitto
+    networks:
+      - mqtt-net
+    restart: unless-stopped
+
+  maas:
+    build:
+      context: ./mqtt/maas
+      dockerfile: Dockerfile
+    container_name: maas
+    ports:
+      - "8000:8000"
     networks:
       - mqtt-net
     restart: unless-stopped

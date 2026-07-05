@@ -92,7 +92,7 @@ public class IngestionService {
         log.info("Loaded {} rows from CSV", csvRows.size());
     }
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 10)
     public void sendBatch() {
         if (csvRows == null || csvRows.isEmpty()) return;
 
