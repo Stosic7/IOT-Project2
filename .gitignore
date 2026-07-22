@@ -1,3 +1,10 @@
 .DS_Store
 bin/
 obj/
+
+# Office/LibreOffice lock fajlovi (nastaju dok je dokument otvoren)
+~$*
+.~lock.*#
+
+# Generator prezentacije - pomocna skripta, ne ide u repo
+mqtt/presentation/generate_projekat3.py
